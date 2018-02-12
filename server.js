@@ -12,15 +12,6 @@ var config = require('./config/env/env');
 
 var app = express();
 
-if (process.env.node !== 'test') {
-    mongoose.connect(config.dburl);
-    var connection = mongoose.connection
-        .once('open', () => console.log('Connected to Mongo on ' + config.dburl))
-        .on('error', (error) => {
-            console.warn('Warning', error.toString());
-        });
-}
-
 // bodyParser zorgt dat we de body uit een request kunnen gebruiken,
 // hierin zit de inhoud van een POST request.
 app.use(bodyParser.urlencoded({
