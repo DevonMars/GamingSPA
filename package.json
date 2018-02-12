@@ -1,0 +1,25 @@
+{
+  "name": "gamingserver",
+  "version": "1.0.0",
+  "description": "Node server API voor mongoDB ",
+  "main": "server.js",
+  "dependencies": {
+    "mocha": "^5.0.0",
+    "mongoose": "^5.0.4",
+    "nodemon": "^1.14.12"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DevonMars/SPA-Gaming-Api.git"
+  },
+  "author": "Devon Marsham",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DevonMars/SPA-Gaming-Api/issues"
+  },
+  "homepage": "https://github.com/DevonMars/SPA-Gaming-Api#readme"
+}

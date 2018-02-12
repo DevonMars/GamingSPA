@@ -1,0 +1,4 @@
+# 'ignore' de volgende files
+
+.idea
+node_modules
