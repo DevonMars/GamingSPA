@@ -15,11 +15,11 @@ const CompanySchema = new Schema({
         type: String,
         required: true
     },
-    county: {
+    country: {
         type: String,
         required: true
     },
-    number_of_employees: {
+    total_employees: {
         type: Number,
         required: true
     }

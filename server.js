@@ -3,14 +3,22 @@
 //
 var http = require('http');
 var express = require('express');
-var bodyParser = require('body-parser')
-var logger = require('morgan');
+var bodyParser = require('body-parser');
 var mongodb = require('./config/mongo.db');
+const mongoose = require('mongoose');
+var logger = require('morgan');
 // var auth_routes_v1 = require('./api/authentication.routes.v1');
 var config = require('./config/env/env');
 // var expressJWT = require('express-jwt');
+var game_company_v1_routes = require('./routes/v1/game_company.routes.v1');
 
 var app = express();
+
+mongoose.Promise = global.Promise;
+
+if (process.env.NODE_ENV !== 'test') {
+    mongoose.createConnection('mongodb://localhost/GamingDB');
+}
 
 // bodyParser zorgt dat we de body uit een request kunnen gebruiken,
 // hierin zit de inhoud van een POST request.
@@ -63,6 +71,7 @@ app.use(function (req, res, next) {
 //                  Installeer de routers
 ////////////////////////////////////////////////////////////////
 
+game_company_v1_routes(app);
 // app.use('/api/v1', auth_routes_v1);
 // app.use('/api/v1', userroutes_v1);
 
