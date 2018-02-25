@@ -19,7 +19,7 @@ module.exports = {
         Company.create(companypropbody)
             .then(company => {
                 session.run(
-                    "MATCH (c:Company {" +
+                    "MERGE (c:Company {" +
                     "_id: {_id}, " +
                     "name: {nameParam}," +
                     "description: {descriptionParam}, " +
@@ -130,14 +130,14 @@ module.exports = {
 
         Company.findByIdAndRemove({'_id' : id})
             .then(company => {
-                session.run("MATCH (c:Company) WHERE c._id={idParam} DETACH DELETE c", {
+                session.run("MATCH (c:Company) WHERE c._id ={idParam} DETACH DELETE c", {
                     idParam: id
                 })
             })
             .then(result => {
                 console.log('Company has been removed');
                 res.status(200).json(result);
-                sessions.close();
+                session.close();
             })
             .catch((error) => res.status(404).send({error: error.message}));
     }
