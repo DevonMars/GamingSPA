@@ -19,7 +19,14 @@ module.exports = {
         Company.create(companypropbody)
             .then(company => {
                 session.run(
-                    "CREATE (c:Company {_id: {_id}, name: {nameParam},description: {descriptionParam}, founder: {founderParam}, country: {countryParam}, total_employees: {employeesParam}}) RETURN c;",
+                    "MATCH (c:Company {" +
+                    "_id: {_id}, " +
+                    "name: {nameParam}," +
+                    "description: {descriptionParam}, " +
+                    "founder: {founderParam}, " +
+                    "country: {countryParam}, " +
+                    "total_employees: {employeesParam}}) " +
+                    "RETURN c;",
                     {
                         nameParam: company.name,
                         _id: company._id.toString(),
@@ -31,7 +38,6 @@ module.exports = {
                         var company;
                         result.records.forEach(function (record) {
                             company = {
-                                _id: company._id,
                                 name: record._fields[0].properties.name,
                                 description: record._fields[0].properties.description,
                                 founder: record._fields[0].properties.founder,
@@ -81,7 +87,7 @@ module.exports = {
             .catch((error) => res.status(400).send({error: error.message}));
     },
 
-    update(req, res) {
+    edit(req, res) {
         res.contentType('application/json');
         const id = req.params.id;
         const body = req.body;

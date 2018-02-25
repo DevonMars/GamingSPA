@@ -11,6 +11,7 @@ var logger = require('morgan');
 var config = require('./config/env/env');
 // var expressJWT = require('express-jwt');
 var game_company_v1_routes = require('./routes/v1/game_company.routes.v1');
+var game_v1_routes = require('./routes/v1/game.routes.v1');
 
 var app = express();
 
@@ -42,7 +43,7 @@ app.use(bodyParser.json({
 
 // configureer de app
 app.set('port', (process.env.PORT || config.env.webPort));
-app.set('env', (process.env.ENV || 'development'))
+app.set('env', (process.env.ENV || 'development'));
 
 // wanneer je je settings wilt controleren
 // console.dir(config);
@@ -63,7 +64,14 @@ app.use(function (req, res, next) {
     // to the API (e.g. in case you use sessions)
     res.setHeader('Access-Control-Allow-Credentials', true);
     // Pass to next layer of middleware
-    next();
+    if (req.method === 'OPTIONS') {
+        res.status(200);
+        res.end();
+    }
+    else {
+        // Pass to next layer of middleware
+        next();
+    }
 });
 
 
@@ -72,6 +80,7 @@ app.use(function (req, res, next) {
 ////////////////////////////////////////////////////////////////
 
 game_company_v1_routes(app);
+game_v1_routes(app);
 // app.use('/api/v1', auth_routes_v1);
 // app.use('/api/v1', userroutes_v1);
 

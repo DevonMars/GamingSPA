@@ -22,8 +22,7 @@ const GameSchema = new Schema({
         type: String,
         unique: true,
         required: true
-    },
-    characters: [CharacterSchema]
+    }
 });
 
 const Game = mongoose.model('game', GameSchema);
