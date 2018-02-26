@@ -22,7 +22,12 @@ const CompanySchema = new Schema({
     total_employees: {
         type: Number,
         required: true
-    }
+    },
+
+    games: [{
+        type: Schema.Types.ObjectId,
+        ref: 'game'
+    }]
 
 });
 

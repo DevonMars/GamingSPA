@@ -96,8 +96,15 @@ module.exports = {
             .then(() => Company.findById({'_id': id}))
             .then(() => {
                 session
-                    .run("MATCH (c:Company) WHERE c._id = {idParam} SET c.name={nameParam}, c.description={descriptionParam}, c.founder={founderParam}, c.country={countryParam}, c.total_employees={employeesParam} RETURN c", {
-                    idParam: id,
+                    .run(
+                        "MATCH (c:Company) WHERE c._id = {idParam} " +
+                        "SET c.name = {nameParam}," +
+                        "c.description = {descriptionParam}," +
+                        "c.founder = {founderParam}," +
+                        "c.country = {countryParam}," +
+                        "c.total_employees = {employeesParam}  " +
+                        "RETURN c", {
+                    idParam: id.toString(),
                     nameParam: body.name,
                     descriptionParam: body.description,
                     founderParam: body.founder,
@@ -140,5 +147,23 @@ module.exports = {
                 session.close();
             })
             .catch((error) => res.status(404).send({error: error.message}));
-    }
+    },
+
+    AttachGame(req, res, next) {
+        let gameId = req.body.gameId || '';
+
+        if (gameId != '') {
+            session.run("MATCH (c:Company {_id: {idParam}}) " +
+                "MATCH (g:Game {_id: {gameParam}}) " +
+                "MERGE (c)-[:OWNS]->(g) " +
+                "RETURN c, g;", {
+                    idParam: req.user._id.toString(),
+                    gameParam: gameId
+                }
+            ).catch(err => next(err)).then(result => {
+                res.status(200).json({msg: "Company successfully owns this game"});
+                session.close();
+            });
+        }
+    },
 };

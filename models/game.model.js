@@ -8,19 +8,16 @@ const GameSchema = new Schema({
         unique: true,
         required: true
     },
-    publisher: {
+    developer: {
         type: String,
-        unique: true,
         required: true
     },
     description: {
         type: String,
-        unique: true,
         required: true
     },
     engine: {
         type: String,
-        unique: true,
         required: true
     }
 });
