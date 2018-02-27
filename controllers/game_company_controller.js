@@ -1,4 +1,5 @@
 const Company = require('../models/company.model');
+const Game = require('../models/game.model');
 var neo4j = require('neo4j-driver').v1;
 
 var driver = neo4j.driver("bolt://localhost", neo4j.auth.basic("neo4j", "Blackboy.1"));
@@ -13,7 +14,8 @@ module.exports = {
             description: body.description,
             founder: body.founder,
             country: body.country,
-            total_employees: body.total_employees
+            total_employees: body.total_employees,
+            gameId: body.gameId
         };
 
         Company.create(companypropbody)
@@ -149,16 +151,16 @@ module.exports = {
             .catch((error) => res.status(404).send({error: error.message}));
     },
 
-    AttachGame(req, res, next) {
-        let gameId = req.body.gameId || '';
+    addGametoCompany(req, res, next) {
+        let companyId = req.body.companyId || '';
 
-        if (gameId != '') {
+        if (companyId != '') {
             session.run("MATCH (c:Company {_id: {idParam}}) " +
                 "MATCH (g:Game {_id: {gameParam}}) " +
-                "MERGE (c)-[:OWNS]->(g) " +
+                "MERGE (c)-[r:OWNS]->(g) " +
                 "RETURN c, g;", {
-                    idParam: req.user._id.toString(),
-                    gameParam: gameId
+                    idParam: companyId,
+                    gameParam : req.body.gameId
                 }
             ).catch(err => next(err)).then(result => {
                 res.status(200).json({msg: "Company successfully owns this game"});

@@ -24,9 +24,10 @@ const CompanySchema = new Schema({
         required: true
     },
 
-    games: [{
+    gameId: [{
         type: Schema.Types.ObjectId,
-        ref: 'game'
+        ref: 'game',
+        required: true
     }]
 
 });
