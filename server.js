@@ -12,6 +12,7 @@ var config = require('./config/env/env');
 // var expressJWT = require('express-jwt');
 var game_company_v1_routes = require('./routes/v1/game_company.routes.v1');
 var game_v1_routes = require('./routes/v1/game.routes.v1');
+var game_character_v1_routes = require('./routes/v1/game_character.routes.v1');
 
 var app = express();
 
@@ -81,6 +82,7 @@ app.use(function (req, res, next) {
 
 game_company_v1_routes(app);
 game_v1_routes(app);
+game_character_v1_routes(app);
 // app.use('/api/v1', auth_routes_v1);
 // app.use('/api/v1', userroutes_v1);
 

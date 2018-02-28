@@ -11,21 +11,10 @@ const CharacterSchema = new Schema({
         type: String,
         required: true
     },
-    backStory: {
-        type: String,
-        required: true
-    },
-
-    specialPower: {
-        type: String,
-        required: true
-    },
-
-    occupation: {
-        type: String,
+    age: {
+        type: Number,
         required: true
     }
-
 });
 
 

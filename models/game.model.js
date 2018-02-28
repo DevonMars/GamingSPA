@@ -19,7 +19,12 @@ const GameSchema = new Schema({
     engine: {
         type: String,
         required: true
-    }
+    },
+    character: [{
+        type: Schema.Types.ObjectId,
+        ref: 'character',
+        required: true
+    }]
 });
 
 const Game = mongoose.model('game', GameSchema);
