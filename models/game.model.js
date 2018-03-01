@@ -22,8 +22,7 @@ const GameSchema = new Schema({
     },
     character: [{
         type: Schema.Types.ObjectId,
-        ref: 'character',
-        required: true
+        ref: 'character'
     }]
 });
 
