@@ -15,7 +15,7 @@ module.exports = {
             founder: body.founder,
             country: body.country,
             total_employees: body.total_employees,
-            gameId: body.gameId
+            games: body.games
         };
 
         Company.create(companypropbody)
@@ -27,7 +27,8 @@ module.exports = {
                     "description: {descriptionParam}, " +
                     "founder: {founderParam}, " +
                     "country: {countryParam}, " +
-                    "total_employees: {employeesParam}}) " +
+                    "total_employees: {employeesParam}," +
+                    "games: {gameParam}}) " +
                     "RETURN c;",
                     {
                         nameParam: company.name,
@@ -35,7 +36,8 @@ module.exports = {
                         descriptionParam: company.description,
                         founderParam: company.founder,
                         countryParam: company.country,
-                        employeesParam: company.total_employees})
+                        employeesParam: company.total_employees,
+                        gameParam: company.games.toString()})
                     .then((result) => {
                         var company;
                         result.records.forEach(function (record) {
@@ -44,7 +46,8 @@ module.exports = {
                                 description: record._fields[0].properties.description,
                                 founder: record._fields[0].properties.founder,
                                 country: record._fields[0].properties.country,
-                                total_employees: record._fields[0].properties.total_employees
+                                total_employees: record._fields[0].properties.total_employees,
+                                games: record._fields[0].properties.games
                             };
                         });
                         console.log('A new company has been created');
@@ -69,6 +72,13 @@ module.exports = {
         res.contentType('application/json');
         const id = req.params.id;
 
+        // Company.find({'_id' : id})
+        //     .then((company) => {
+        //         console.log(company)
+        //         res.status(200).json(company)
+        //     })
+        //     .catch((error) => res.status(400).send({error: error.message}));
+
         session.run("MATCH (c:Company) WHERE c._id = {idParam} RETURN c", {idParam : id})
             .then((result) => {
                 var company;
@@ -79,7 +89,8 @@ module.exports = {
                         description: record._fields[0].properties.description,
                         founder: record._fields[0].properties.founder,
                         country: record._fields[0].properties.country,
-                        total_employees: record._fields[0].properties.total_employees
+                        total_employees: record._fields[0].properties.total_employees,
+                        games: record._fields[0].properties.games
                     }
                 });
                 console.log('Showing info of a single company');
