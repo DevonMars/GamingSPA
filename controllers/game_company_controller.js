@@ -19,6 +19,13 @@ module.exports = {
         };
 
         Company.create(companypropbody)
+            .then((company) => {
+                Game.findOne({'_id': company.games})
+                    .then((game) => {
+                        game.company.push(company);
+                        game.save();
+                    })
+            })
             .then(company => {
                 session.run(
                     "MERGE (c:Company {" +
