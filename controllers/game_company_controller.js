@@ -27,46 +27,6 @@ module.exports = {
                     .then((company) => res.status(200).send(company))
                     .catch((error) => res.status(400).send({error: error.message}))
             })
-
-
-            // .then(company => {
-            //     session.run(
-            //         "MERGE (c:Company {" +
-            //         "_id: {_id}, " +
-            //         "name: {nameParam}," +
-            //         "description: {descriptionParam}, " +
-            //         "founder: {founderParam}, " +
-            //         "country: {countryParam}, " +
-            //         "total_employees: {employeesParam}," +
-            //         "games: {gameParam}}) " +
-            //         "RETURN c;",
-            //         {
-            //             nameParam: company.name,
-            //             _id: company._id.toString(),
-            //             descriptionParam: company.description,
-            //             founderParam: company.founder,
-            //             countryParam: company.country,
-            //             employeesParam: company.total_employees,
-            //             gameParam: company.games.toString()})
-            //         .then((result) => {
-            //             var company;
-            //             result.records.forEach(function (record) {
-            //                 company = {
-            //                     name: record._fields[0].properties.name,
-            //                     description: record._fields[0].properties.description,
-            //                     founder: record._fields[0].properties.founder,
-            //                     country: record._fields[0].properties.country,
-            //                     total_employees: record._fields[0].properties.total_employees,
-            //                     games: record._fields[0].properties.games
-            //                 };
-            //             });
-            //             console.log('A new company has been created');
-            //             res.status(201).send(company);
-            //             session.close();
-            //         })
-            //         .catch((error) => res.status(400).send({error: error.message}));
-            // }).catch((error) => res.status(400).send({error: error.message}));
-
     },
     getAll(req, res) {
         res.contentType('application/json');
@@ -88,26 +48,6 @@ module.exports = {
                 res.status(200).json(result)
             })
             .catch((error) => res.status(400).send({error: error.message}))
-
-        // session.run("MATCH (c:Company) WHERE c._id = {idParam} RETURN c", {idParam : id})
-        //     .then((result) => {
-        //         var company;
-        //         result.records.forEach(function (record) {
-        //             company = {
-        //                 _id: record._fields[0].properties._id,
-        //                 name: record._fields[0].properties.name,
-        //                 description: record._fields[0].properties.description,
-        //                 founder: record._fields[0].properties.founder,
-        //                 country: record._fields[0].properties.country,
-        //                 total_employees: record._fields[0].properties.total_employees,
-        //                 games: record._fields[0].properties.games
-        //             }
-        //         });
-        //         console.log('Showing info of a single company');
-        //         res.status(200).send(company);
-        //         session.close();
-        //     })
-            .catch((error) => res.status(400).send({error: error.message}));
     },
 
     edit(req, res) {
@@ -117,40 +57,14 @@ module.exports = {
 
         Company.findByIdAndUpdate({'_id' : id}, body)
             .then(() => Company.findById({'_id': id}))
-            .then(() => {
-                session
-                    .run(
-                        "MATCH (c:Company) WHERE c._id = {idParam} " +
-                        "SET c.name = {nameParam}," +
-                        "c.description = {descriptionParam}," +
-                        "c.founder = {founderParam}," +
-                        "c.country = {countryParam}," +
-                        "c.total_employees = {employeesParam}  " +
-                        "RETURN c", {
-                    idParam: id.toString(),
-                    nameParam: body.name,
-                    descriptionParam: body.description,
-                    founderParam: body.founder,
-                    countryParam: body.country,
-                    employeesParam: body.total_employees
-                })
-                    .then((result) => {
-                        var company;
-                        result.records.forEach(function (record) {
-                            company = {
-                                _id: record._fields[0].properties._id,
-                                name: record._fields[0].properties.name,
-                                description: record._fields[0].properties.description,
-                                founder: record._fields[0].properties.founder,
-                                country: record._fields[0].properties.country,
-                                total_employees: record._fields[0].properties.total_employees
-                            }
-                        });
-                        console.log('Company has been updated');
-                        res.status(200).send(company);
-                        session.close();
-                    })
-            })
+            .then((company) => {
+            "use strict";
+            if (company == null) {
+                res.status(400).json({error: 'No objects'})
+            } else {
+                res.status(200).send(company);
+            }
+        })
             .catch((error) => res.status(400).send({error: error.message}));
     },
 
