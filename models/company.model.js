@@ -7,7 +7,11 @@ const CompanySchema = new Schema({
         unique: true,
         required: true
     },
-    description: {
+    largeDescription: {
+        type: String,
+        required: true
+    },
+    smallDescription: {
         type: String,
         required: true
     },

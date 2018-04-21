@@ -11,7 +11,8 @@ module.exports = {
         const body = req.body;
         const companypropbody = {
             name: body.name,
-            description: body.description,
+            largeDescription: body.largeDescription,
+            smallDescription: body.smallDescription,
             founder: body.founder,
             country: body.country,
             total_employees: body.total_employees,
@@ -20,10 +21,10 @@ module.exports = {
         Company.create(companypropbody)
             .then((company) => {
                 Game.findOne({'_id': company.games})
-                    .then((game) => {
-                        game.company.push(company);
-                        game.save();
-                    })
+                    // .then((game) => {
+                    //     // game.company.push(company);
+                    //     // game.save();
+                    // })
                     .then((company) => res.status(200).send(company))
                     .catch((error) => res.status(400).send({error: error.message}))
             })
@@ -58,6 +59,7 @@ module.exports = {
         Company.findByIdAndUpdate({'_id' : id}, body)
             .then(() => Company.findById({'_id': id}))
             .then((company) => {
+            // Game.findByIdAndUpdate({'_id' : company.games});
             "use strict";
             if (company == null) {
                 res.status(400).json({error: 'No objects'})
@@ -73,17 +75,15 @@ module.exports = {
         const id = req.params.id;
 
         Company.findByIdAndRemove({'_id' : id})
-            .then(company => {
-                session.run("MATCH (c:Company) WHERE c._id ={idParam} DETACH DELETE c", {
-                    idParam: id
-                })
+            .then((company) => {
+                if (company == null) {
+                    res.status(400).json({error: 'No objects deleted'});
+                } else {
+                    res.status(200).send(company);
+                }
             })
-            .then(result => {
-                console.log('Company has been removed');
-                res.status(200).json(result);
-                session.close();
-            })
-            .catch((error) => res.status(404).send({error: error.message}));
+            .catch((error) => res.status(400).send({error: error.message}));
+
     },
 
     addGametoCompany(req, res, next) {
