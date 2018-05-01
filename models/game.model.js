@@ -20,10 +20,6 @@ const GameSchema = new Schema({
         type: String,
         required: true
     },
-    company: [{
-        type: Schema.Types.ObjectId,
-        ref: 'company'
-    }],
     character: [{
         type: Schema.Types.ObjectId,
         ref: 'character'
